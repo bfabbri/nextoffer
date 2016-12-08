@@ -1,0 +1,9 @@
+plugins/*
+platforms/*
+hooks/*
+package.json
+NOTICE
+COPYWRITE.md
+CONTRIBUTING.md
+config.xml
+icon.png
