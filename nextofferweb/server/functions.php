@@ -18,6 +18,18 @@ function queryMysql($query){
 	return $result;
 }
 
+function sanitizeString($var){
+	// Retira tags HTML e PHP de uma string
+	$var = strip_tags($var);
+	// Converte todos os caracteres aplicaveis em entidades html
+	$var = htmlentities($var); //dont work with UTF8 caracters
+	// Desfaz o efeito de addslashs()
+	$var = stripslashes($var);
+
+	//return mysql_real_escape_string($var);
+	return $var;
+}
+
 function getarray($result){
 	$array = array();
  	while($row = mysql_fetch_assoc($result))
@@ -26,11 +38,3 @@ function getarray($result){
   }
 	return $array;
 }
-
-header("access-control-allow-origin: *");
-header('Access-Control-Allow-Methods: GET, POST');
-
-$sql = "SELECT * FROM offers WHERE codoffer > 0";
-$result = queryMysql ( $sql );
-
-echo json_encode(getarray($result));
