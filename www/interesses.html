@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>Template Bootstrap</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  
+  <!-- jQuery (necessario para os plugins Javascript do Bootstrap) -->
+  <script src="js/jquery.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+
+  <script type="text/javascript">
+    function setpreferenceslocal(){
+      localStorage.setItem("pref-bares", $('#bares').is(":checked"));
+      localStorage.setItem("pref-restaurantes", $('#restaurantes').is(":checked"));
+      localStorage.setItem("pref-hoteis", $('#hoteis').is(":checked"));
+      localStorage.setItem("pref-saude", $('#saude').is(":checked"));
+      localStorage.setItem("pref-beleza", $('#beleza').is(":checked"));
+      localStorage.setItem("pref-compras", $('#compras').is(":checked"));
+      localStorage.setItem("pref-viagem", $('#viagem').is(":checked"));
+    }
+  </script>
+</head>
+
+<body>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>                        
+        </button>
+        <a class="navbar-brand" href="#"><img  src="logosemfundo.png"  alt="NextOffer" width="30" height="23"></a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li><a href="main.html">Inicio</a></li>
+          <li class="active" ><a href="interesses.html">Meus Interesses</a></li>
+          <li><a href="notificacoes.html">Notificações</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid text-center">
+
+    <div class="row">
+      <div class="col-xs-12">
+        <h3 style="margin-top: 30px; margin-bottom: 50px">Marque seus interesses</h3>
+      </div>
+    </div>
+
+    <div class="row">
+
+      <div class="col-xs-6" align="left" style="padding-left: 30px">
+      	<div class="checkbox" onclick="setpreferenceslocal()" style="height: 30px; font-size: 17px">
+      		<label><input type="checkbox" id="bares" style="font-size: 17px"> Bares</label>
+      	</div>
+      	<div class="checkbox" onclick="setpreferenceslocal()" style="height: 30px; font-size: 17px">
+      		<label><input type="checkbox" id="restaurantes" style="font-size: 17px"> Restaurantes</label>
+      	</div>
+      	<div class="checkbox" onclick="setpreferenceslocal()" style="height: 30px; font-size: 17px">
+      		<label><input type="checkbox" id="hoteis" style="font-size: 17px"> Hoteis</label>
+      	</div>
+      	<div class="checkbox" onclick="setpreferenceslocal()" style="height: 30px; font-size: 17px">
+      		<label><input type="checkbox" id="saude" style="font-size: 17px"> Saude</label>
+      	</div>
+      </div>
+
+      <div class="col-xs-6" align="left" style="padding-left: 30px">
+      	<div class="checkbox" onclick="setpreferenceslocal()" style="height: 30px; font-size: 17px">
+      		<label><input type="checkbox" id="beleza" style="font-size: 17px"> Beleza</label>
+      	</div>
+      	<div class="checkbox" onclick="setpreferenceslocal()" style="height: 30px; font-size: 17px">
+      		<label><input type="checkbox" id="compras" style="font-size: 17px"> Compras</label>
+      	</div>
+      	<div class="checkbox" onclick="setpreferenceslocal()" style="height: 30px; font-size: 17px">
+      		<label><input type="checkbox" id="viagem" style="font-size: 17px"> Viagem</label>
+      	</div>
+      </div>
+
+    </div>
+
+    <!-- <div class="row" style="margin-top: 40px">
+      <div class="col-xs-12">
+        <button class="btn btn-lg btn-default btn-signin center-block" type="button" onclick="setpreferenceslocal()">Concluir</button>
+      </div>
+    </div> -->
+
+  </div>
+
+  <footer class="container-fluid text-center" style="position: fixed; bottom: 0px; width: 100%;">
+    <div style="font-size: 20px">Next Offer</div>
+  </footer>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      if(localStorage.getItem("pref-bares") == 'true')
+        $('#bares').prop('checked', true)
+      if(localStorage.getItem("pref-restaurantes") == 'true')
+        $('#restaurantes').prop('checked', true)
+      if(localStorage.getItem("pref-hoteis") == 'true')
+        $('#hoteis').prop('checked', true)
+      if(localStorage.getItem("pref-saude") == 'true')
+        $('#saude').prop('checked', true)
+      if(localStorage.getItem("pref-beleza") == 'true')
+        $('#beleza').prop('checked', true)
+      if(localStorage.getItem("pref-compras") == 'true')
+        $('#compras').prop('checked', true)
+      if(localStorage.getItem("pref-viagem") == 'true')
+        $('#viagem').prop('checked', true)
+
+      // $('#restaurantes').prop('checked', localStorage.getItem("pref-restaurantes"))
+      // $('#hoteis').prop('checked', localStorage.getItem("pref-hoteis"))
+      // $('#saude').prop('checked', localStorage.getItem("pref-saude"))
+      // $('#beleza').prop('checked', localStorage.getItem("pref-beleza"))
+      // $('#compras').prop('checked', localStorage.getItem("pref-compras"))
+      // $('#viagem').prop('checked', localStorage.getItem("pref-viagem"))
+    }); 
+  </script>
+
+</body>
+</html>

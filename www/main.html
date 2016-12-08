@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>Template Bootstrap</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  
+  <!-- jQuery (necessario para os plugins Javascript do Bootstrap) -->
+  <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/offers.js"></script>
+
+  <!-- Google Maps -->
+  <!-- *** Essa key eh apenas para teste, nao utilizar *** -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwGVdz0WVyzusGGkV5MLkjlTuo-5WhUc0"></script>
+  
+  <script>
+    ////////////////////////////////////////////////////////
+    // Need to be this way to prevent ugly message on ios //
+    ////////////////////////////////////////////////////////
+    //
+    //find location
+    function onDeviceReady() {
+      $body = $("body");
+      $body.addClass("loading")
+      navigator.geolocation.getCurrentPosition(onSuccess, onError, { timeout: 10000 });
+    }
+
+    function onSuccess(position) {
+      var lat=position.coords.latitude;
+      var lang=position.coords.longitude;
+
+      //Google Maps
+      var myLatlng = new google.maps.LatLng(lat,lang);
+      var mapOptions = {zoom: 14,center: myLatlng}
+      var map = new google.maps.Map(document.getElementById('#map-canvas'), mapOptions);
+      var marker = new google.maps.Marker({position: myLatlng, map: map, icon:'img/me.png'});
+
+      addoffers(map);
+
+      $body.removeClass("loading")
+    }
+
+    function onError(error) {
+      alert('onError')
+      // ios
+      if(navigator.userAgent.match(/(iPhone|iPod|iPad)/)){
+        alert('O NextOffer precisa da sua localização para encontrar os estabelecimentos próximos. Por favor, ative seu GPS em Ajustes -> Privacidade -> Serv. Localização -> NextOffer');
+
+      // Android
+      } else {
+        alert('Por favor, ative seu GPS. O NextOffer precisa da sua localização para encontrar os estabelecimentos próximos.');
+        location.reload();
+      }
+    }
+    ////////////////////////////
+    // getLocation ends here! //
+    ////////////////////////////
+
+    
+    //arranging the header footer and scroll
+    function fPreparWindows(){
+      var TopDist = $('#Header').height();
+      var BottomDist = $('#Footer').height();
+      var WindowDist = $(window).height();
+      var WindowWidth = $(window).width();
+      var Dist = WindowDist - TopDist - BottomDist;
+      $(".frame").css({'top':TopDist + 'px' , 'height':Dist + 'px' , 'padding-top':'1px' , 'margin-top':'0px'});
+      $("#ActionButtonContainer").css({'bottom':BottomDist+12 + 'px' , 'right': '5% ' });
+    }
+
+    function addoffers(map) {
+      // var offers = {
+      //   0: {
+      //     type: 'bares',
+      //     lat: -22.002211,
+      //     long: -47.898571,
+      //     name: 'Bar',
+      //     offer: 'Biritis gratis'
+      //   },
+      //   1: {
+      //     type: 'restaurantes',
+      //     lat: -22.007761,
+      //     long: -47.900953,
+      //     name: 'Restaurante',
+      //     offer: 'Picanha 1 real'
+      //   },
+      //   2: {
+      //     type: 'hoteis',
+      //     lat: -22.009044,
+      //     long: -47.896383,
+      //     name: 'Hotel California',
+      //     offer: 'You can checkout any time you like<br/>but you can never leave'
+      //   },
+      //   3: {
+      //     type: 'saude',
+      //     lat: -22.008666,
+      //     long: -47.890514,
+      //     name: 'UBA',
+      //     offer: 'Pegue já sua gripe aqui'
+      //   },
+      //   4: {
+      //     type: 'beleza',
+      //     lat: -22.006010,
+      //     long: -47.891962,
+      //     name: 'Salão Renascimento',
+      //     offer: 'A única forma de deixar você bonita'
+      //   },
+      //   5: {
+      //     type: 'compras',
+      //     lat: -22.006050,
+      //     long: -47.897627,
+      //     name: 'Black Fraude',
+      //     offer: 'Tudo pela metade do dobro'
+      //   },
+      //   6: {
+      //     type: 'viagem',
+      //     lat: -22.010147,
+      //     long: -47.893786,
+      //     name: 'Topcomm Tour',
+      //     offer: 'Rio de Janeiro - Miami com novas fibras óticas especialmente projetadas para UDP'
+      //   }
+      // }
+      function attachName(marker, name, offer) {
+        var infowindow = new google.maps.InfoWindow({
+          content: '<b>'+name+'</b><br/><p>'+offer+'</p>'
+        });
+
+        google.maps.event.addListener(marker, 'click', function(){
+          infowindow.open(marker.get('map'), marker);
+        });
+      }
+
+      $.post('../nextofferweb/server/promos.php', function(data){
+        var offers = JSON && JSON.parse(data) || $.parseJSON(data);
+
+        
+
+        for(i = 0; i < Object.keys(offers).length; i++){
+          switch(offers[i]['typeofplace']) {
+            case 'bares':
+              if(localStorage.getItem("pref-bares") == 'true'){
+                var myLatlng = new google.maps.LatLng(offers[i]['latitude'], offers[i]['longitude']);
+                var marker = new google.maps.Marker({position: myLatlng, map: map, icon:'img/bar.png'});
+                attachName(marker, offers[i]['name'], offers[i]['offer'])
+              }
+              break;
+            case 'restaurantes':
+              if(localStorage.getItem("pref-restaurantes") == 'true'){
+                var myLatlng = new google.maps.LatLng(offers[i]['latitude'], offers[i]['longitude']);
+                var marker = new google.maps.Marker({position: myLatlng, map: map, icon:'img/restaurante.png'});
+                attachName(marker, offers[i]['name'], offers[i]['offer'])
+              }
+              break;
+            case 'hoteis':
+              if(localStorage.getItem("pref-hoteis") == 'true'){
+                var myLatlng = new google.maps.LatLng(offers[i]['latitude'], offers[i]['longitude']);
+                var marker = new google.maps.Marker({position: myLatlng, map: map, icon:'img/hotel.png'});
+                attachName(marker, offers[i]['name'], offers[i]['offer'])
+              }
+              break;
+            case 'saude':
+              if(localStorage.getItem("pref-saude") == 'true'){
+                var myLatlng = new google.maps.LatLng(offers[i]['latitude'], offers[i]['longitude']);
+                var marker = new google.maps.Marker({position: myLatlng, map: map, icon:'img/saude.png'});
+                attachName(marker, offers[i]['name'], offers[i]['offer'])
+              }
+              break;
+            case 'beleza':
+              if(localStorage.getItem("pref-beleza") == 'true'){
+                var myLatlng = new google.maps.LatLng(offers[i]['latitude'], offers[i]['longitude']);
+                var marker = new google.maps.Marker({position: myLatlng, map: map, icon:'img/beleza.png'});
+                attachName(marker, offers[i]['name'], offers[i]['offer'])
+              }
+              break;
+            case 'compras':
+              if(localStorage.getItem("pref-compras") == 'true'){
+                var myLatlng = new google.maps.LatLng(offers[i]['latitude'], offers[i]['longitude']);
+                var marker = new google.maps.Marker({position: myLatlng, map: map, icon:'img/compras.png'});
+                attachName(marker, offers[i]['name'], offers[i]['offer'])
+              }
+              break;
+            case 'viagem':
+              if(localStorage.getItem("pref-viagem") == 'true'){
+                var myLatlng = new google.maps.LatLng(offers[i]['latitude'], offers[i]['longitude']);
+                var marker = new google.maps.Marker({position: myLatlng, map: map, icon:'img/viagem.png'});
+                attachName(marker, offers[i]['name'], offers[i]['offer'])
+              }
+              break;
+            default:
+          }
+        }
+      });
+    }
+
+  </script>
+
+</head>
+
+<body onload="onDeviceReady()">
+
+  <nav class="navbar navbar-inverse" id="Header">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>                        
+        </button>
+        <a class="navbar-brand" href="#"> <img  src="logosemfundo.png"  alt="NextOffer" width="30" height="23" > </a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="main.html">Inicio</a></li>
+          <li><a href="interesses.html">Meus Interesses</a></li>
+          <li><a href="notificacoes.html">Notificações</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="frame" style="height:100%; width: 100%; overflow-y: scroll; top: 52px; padding-top: 1px; margin-top: 0px;">
+      
+    <div id="#map-canvas" style="height:100%;width:100%;overflow-y:scroll;"></div>
+
+    <div id="Footer" style="width:100%; position:fixed; bottom:0px;"></div>
+
+    <div class="loadingicon"></div>
+
+  </div>
+
+	<script type="text/javascript">
+    $(document).ready(function(){
+      fPreparWindows();
+    }); 
+  </script>
+
+</body>
+</html>
