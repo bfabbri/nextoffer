@@ -14,33 +14,74 @@
   <!-- jQuery (necessario para os plugins Javascript do Bootstrap) -->
   <script src="js/jquery.js"></script>
   <script src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/variables.js"></script>
+  <script type="text/javascript" src="js/functions.js"></script>
+
 </head>
 
 <body>
   <nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
-      </button>
-      <a class="navbar-brand" href="#"> <img  src="logosemfundo.png"  alt="NextOffer" width="30" height="23" > </a>
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>                        
+        </button>
+        <a class="navbar-brand" href="#"> <img  src="logosemfundo.png"  alt="NextOffer" width="30" height="23" > </a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="interesses.html">Meus Interesses</a></li>
+          <li class="active" ><a href="notificacoes.html">Notificações</a></li>
+        </ul>
+
+      </div>
     </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <li><a href="main.html">Inicio</a></li>
-        <li><a href="interesses.html">Meus Interesses</a></li>
-        <li class="active" ><a href="notificacoes.html">Notificações</a></li>
-      </ul>
+  </nav>
 
-    </div>
-  </div>
-</nav>
+  <div class="container-fluid" id="notificacoesdehoje"></div>
 
-<footer class="container-fluid text-center" style="position: fixed; bottom: 0px; width: 100%;">
-  <div style="font-size: 20px">Next Offer</div>
-</footer>
+  <footer class="container-fluid text-center" style="position: fixed; bottom: 0px; width: 100%;">
+    <div style="font-size: 20px">Next Offer</div>
+  </footer>
 
+  <script type="text/javascript">
+    $(document).ready(function(){
+      var d = new Date();
+      var n = d.getDay();
+      var nh = localStorage.getItem('dia'+n+'promos:');
+
+      // se nao existe nenhuma promocao no dia de hoje
+      if(nh == '' || nh == null || nh == 'null' || nh == undefined || nh == 'undefined'){
+        $('#notificacoesdehoje').html('<div class="row" style="padding-top: 25%; text-align:center;"><h4>Você ainda não recebeu nenhuma promoção hoje :(<br/><br/>Que tal caçar alguma por aí??</h4><a href="index.html"><button class="btn btn-lg btn-success" style="margin-top:10%;">Ver mapa</button></a></div>');
+
+      // se existe alguma promocao hoje
+      } else {
+        var block = '';
+        var promos = localStorage.getItem('dia'+n+'promos:');
+        var res = promos.split('--'); // divisao das promos eh o -
+        for(j = 0; j < res.length; j++){
+          if(res[j] != ''){
+            var subres = res[j].split('|') // divisao das infos de cada promo eh o |
+
+            block +=  '<div class="row">'+
+                        '<div class="col-xs-12">'+
+                          '<h1>'+subres[1]+'</h1>'+
+                          '<p>'+subres[2]+'</p>'+
+                        '</div>'+ 
+                      '</div>'+
+                      '<hr>';
+          }
+        }
+        $('#notificacoesdehoje').append(block);
+      }
+
+      // Instantiate fastclick
+      FastClick.attach(document.body);
+
+    }); 
+  </script>
 </body>
 </html>

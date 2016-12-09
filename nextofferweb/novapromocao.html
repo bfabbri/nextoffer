@@ -17,6 +17,7 @@
     <!-- jQuery (necessario para os plugins Javascript do Bootstrap) -->
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/variables.js"></script>
 
 </head>
 
@@ -120,7 +121,7 @@
             if(value == 'Bar')
                 $('#type').val('bares');
             else if(value == 'Restaurante')
-                $('#type').val('restautantes');
+                $('#type').val('restaurantes');
             else if(value == 'Hotel')
                 $('#type').val('hoteis');
             else if(value == 'Saude')
@@ -130,7 +131,7 @@
             else if(value == 'Compras')
                 $('#type').val('compras');
             else if(value == 'Viagem')
-                $('#type').val('viagens');
+                $('#type').val('viagem');
         }
 
 
@@ -151,7 +152,7 @@
                 alert('Por favor, insira uma longitude válida')
             else {
                 var content = $(novapromo).serialize();
-                $.post('server/novapromo.php/' , content ,function(data){
+                $.post(novapromo, content ,function(data){
                     var result = JSON && JSON.parse(data) || $.parseJSON(data);
                     if(result == 'success'){
                         alert('Promoção cadastrada com sucesso!');

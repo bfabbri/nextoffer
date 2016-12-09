@@ -14,6 +14,8 @@
   <!-- jQuery (necessario para os plugins Javascript do Bootstrap) -->
   <script src="js/jquery.js"></script>
   <script src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/variables.js"></script>
+  <script type="text/javascript" src="js/functions.js"></script>
 
   <script type="text/javascript">
     function setpreferenceslocal(){
@@ -41,7 +43,7 @@
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
-          <li><a href="main.html">Inicio</a></li>
+          <li><a href="index.html">Inicio</a></li>
           <li class="active" ><a href="interesses.html">Meus Interesses</a></li>
           <li><a href="notificacoes.html">Notificações</a></li>
         </ul>
@@ -88,11 +90,18 @@
 
     </div>
 
-    <!-- <div class="row" style="margin-top: 40px">
+    <div class="row" style="margin-top: 30px">
       <div class="col-xs-12">
-        <button class="btn btn-lg btn-default btn-signin center-block" type="button" onclick="setpreferenceslocal()">Concluir</button>
+        <h4>Receber promoções num raio de: (km)</h4>
+        <input type="number" name="mindist" id="mindist" step="0.01" style="border-radius: 5px; padding: 10px 20px;">
       </div>
-    </div> -->
+    </div>
+
+    <div class="row" style="margin-top: 50px">
+      <div class="col-xs-12">
+        <button class="btn btn-lg btn-warning" onclick="apagarofertasdehoje()">Apagar ofertas recebidas hoje</button>
+      </div>
+    </div>
 
   </div>
 
@@ -117,13 +126,22 @@
       if(localStorage.getItem("pref-viagem") == 'true')
         $('#viagem').prop('checked', true)
 
-      // $('#restaurantes').prop('checked', localStorage.getItem("pref-restaurantes"))
-      // $('#hoteis').prop('checked', localStorage.getItem("pref-hoteis"))
-      // $('#saude').prop('checked', localStorage.getItem("pref-saude"))
-      // $('#beleza').prop('checked', localStorage.getItem("pref-beleza"))
-      // $('#compras').prop('checked', localStorage.getItem("pref-compras"))
-      // $('#viagem').prop('checked', localStorage.getItem("pref-viagem"))
+      var mD = localStorage.getItem("minDist");
+      if(mD == '' || mD == null || mD == undefined)
+        localStorage.setItem("minDist", 0.1);
+      $('#mindist').val(mD);
+
+      $('#mindist').focusout(function(){localStorage.setItem("minDist", $('#mindist').val())})
+
+      // Instantiate fastclick
+      FastClick.attach(document.body);
     }); 
+
+    function apagarofertasdehoje(){
+      var d = new Date();
+      var n = d.getDay();
+      localStorage.setItem('dia'+n+'promos:','');
+    }
   </script>
 
 </body>

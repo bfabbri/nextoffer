@@ -1,9 +1,16 @@
 <?php
 
-define('CONSTANT_server', 'localhost');   // Unlikely to require changing
+// localhost
+// define('CONSTANT_server', 'localhost');   // Unlikely to require changing
+// define('CONSTANT_database', 'nextoffer');      // Modify these...
+// define('CONSTANT_dbusername', 'root');  // ...variables according
+// define('CONSTANT_dbpassword', '');  // ...to your installation
+
+// dreamhost
+define('CONSTANT_server', 'mysql.btbs.com.br');   // Unlikely to require changing
 define('CONSTANT_database', 'nextoffer');      // Modify these...
-define('CONSTANT_dbusername', 'root');  // ...variables according
-define('CONSTANT_dbpassword', '');  // ...to your installation
+define('CONSTANT_dbusername', 'bfabbri');  // ...variables according
+define('CONSTANT_dbpassword', 'Senhaopencart_bijuterismomix');  // ...to your installation
 
 //connect to the server
 $con = mysql_connect(CONSTANT_server, CONSTANT_dbusername, CONSTANT_dbpassword) or die(mysql_error());
